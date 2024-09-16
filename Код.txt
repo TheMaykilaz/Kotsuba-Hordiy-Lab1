@@ -1,0 +1,79 @@
+import java.util.Scanner;
+
+class LucasNumber {
+    private int number; // Номер числа Люка
+    private int value;  // Значення числа Люка
+
+    public LucasNumber(int number, int value) {
+        this.number = number;
+        this.value = value;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    // Сеттер для значення
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public boolean isPrime() {
+        if (value <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(value); i++) {
+            if (value % i == 0) return false;
+        }
+        return true;
+    }
+}
+
+public class LucasNumbersPrimeChecker {
+
+    // Метод для обчислення числа Люка за індексом
+    public static int calculateLucas(int n) {
+        if (n == 0) return 2;
+        if (n == 1) return 1;
+        int lucasPrev = 2, lucasCurrent = 1;
+        for (int i = lucasPrev; i <= n; i++) {
+            int nextLucas = lucasPrev + lucasCurrent;
+            lucasPrev = lucasCurrent;
+            lucasCurrent = nextLucas;
+        }
+        return lucasCurrent;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int N;
+
+        // Перевіряємо, чи передані дані через командний рядок
+        if (args.length > 0) {
+            N = Integer.parseInt(args[0]);
+        } else {
+            // Якщо ні, запитуємо користувача через клавіатуру
+            System.out.print("Введіть кількість чисел Люка, які потрібно перевірити ( N > 0): ");
+            N = scanner.nextInt();
+        }
+
+        LucasNumber[] lucasNumbers = new LucasNumber[N];
+
+        // Створюємо об'єкти для кожного числа Люка та перевіряємо прості числа
+        for (int i = 0; i < N; i++) {
+            int lucasValue = calculateLucas(i);
+            lucasNumbers[i] = new LucasNumber(i, lucasValue);
+        }
+
+        // Виводимо результати
+        System.out.println("Числа Люка та перевірка на прості числа:");
+        for (LucasNumber lucasNumber : lucasNumbers) {
+            System.out.println("Число Люка #" + lucasNumber.getNumber() + ": " + lucasNumber.getValue() +
+                    (lucasNumber.isPrime() ? " Просте" : " Не просте")); //т
+        }
+
+        scanner.close();
+    }
+}
